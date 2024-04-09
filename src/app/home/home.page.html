@@ -1,0 +1,377 @@
+<!-- header del login -->
+<ion-header  mode="ios" class="ion-no-border" >
+  <div class="authentication-header">
+    <h1>Autenticación</h1>
+  </div>
+</ion-header>
+<!-- Formulario de inicio de sesion -->
+<ion-content>
+    <ion-card mode="ios">
+      <ion-card-header>
+        <ion-card-title>Inicio de sesión</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-item>
+          <ion-input type="text" [(ngModel)]="usuario" placeholder="Nombre de usuario">
+          </ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-input type="password" [(ngModel)]="contrasena" placeholder="Contraseña">
+          </ion-input>
+        </ion-item>
+          <!-- al presionar se inicia sesion con metodo login -->
+          <ion-button expand="block" color="primary" (click)="login()">Iniciar sesión</ion-button>
+          <!-- Envia a la pagina de registro -->
+          <ion-button expand="block" color="primary" id="open-modal-agregar">registrate</ion-button>
+          <div style="text-align: center;">
+          Tiendas registradas {{usuarios.length}}
+      </div>
+      
+    <!-- Formulario de registro -->
+      </ion-card-content> 
+    </ion-card>
+      <ion-modal  trigger="open-modal-agregar">
+        <ng-template>
+        <ion-header mode="ios" class="ion-no-border">
+          <ion-toolbar color="tertiary">
+            <ion-title>Registro</ion-title>
+          </ion-toolbar>
+        </ion-header>
+    
+        <ion-content>
+          <ion-item>
+            <ion-input type="text" [(ngModel)]="name" placeholder="Nombre">
+            </ion-input>
+          </ion-item>
+    
+          <ion-item>
+            <ion-input type="text" [(ngModel)]="username" placeholder="Nombre de usuario">
+            </ion-input>
+          </ion-item>
+    
+          <ion-item>
+            <ion-input type="password" [(ngModel)]="password" placeholder="Contraseña">
+            </ion-input>
+          </ion-item>
+    
+          <ion-item>
+            <ion-input type="text" [(ngModel)]="storeName" placeholder="Numero de seguro">
+            </ion-input>
+          </ion-item>
+    
+          <ion-item>
+            <ion-input type="text" [(ngModel)]="imageUrl" placeholder="URL de la imagen">
+            </ion-input>
+          </ion-item>
+          <div style="text-align: center;">
+          <ion-button color="success" (click)="guardarusuario()">Registrarse</ion-button>
+          <ion-button color="tertiary" (click)="cancel()">Cacelar</ion-button>
+        </div>
+      </ion-content>
+    </ng-template>
+    </ion-modal>
+
+    <!-- Menu -->
+    <!-- Header del menu, donde se muestra la imagen del usuario y su nombre -->
+    <ion-modal  [isOpen]="MenuPrincipal">
+      <ng-template>
+        <ion-header>
+          <div style="padding: 5px;">
+            <ion-row>
+            
+            <ion-avatar>
+              <img alt="Usuario" src="{{elemento.fotografia}}" />
+            </ion-avatar>
+            <h1 style="padding: 5px;color:white;">{{elemento.usuario}}</h1>
+          </ion-row>
+          </div>
+        </ion-header>
+
+    <!-- Boton de citas -->
+      <ion-content>
+        <ion-row>
+          <ion-col>    
+            <ion-card color="primary">
+              <img alt="Agendar Cita" src="https://cdn-icons-png.flaticon.com/128/9411/9411437.png" (click)="citasModal()" />
+              <ion-card-header>
+                <ion-card-title>Agendar Cita</ion-card-title>
+              </ion-card-header>
+            </ion-card>
+          </ion-col>
+
+      <!-- Boton de toma de medicamentos -->
+          <ion-col>
+            <ion-card color="secondary">
+              <img alt="Toma de Medicamentos" src="https://cdn-icons-png.flaticon.com/128/647/647237.png" (click)="medicamentosModal()" />
+              <ion-card-header>
+                <ion-card-title>Toma de Medicamentos</ion-card-title>
+                <!--ion-card-subtitle>Lo que vendes</ion-card-subtitle-->
+              </ion-card-header>
+              <!--ion-card-content> Card Content </ion-card-content-->
+            </ion-card>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+
+      <!-- Boton chat medico -->
+          <ion-col>
+            <ion-card color="primary">
+              <img alt="Chat medico" src="https://cdn-icons-png.flaticon.com/128/8987/8987697.png" (click)="openWhatsAppConversation('523123106556')" />
+              <ion-card-header>
+                <ion-card-title>Chat medico</ion-card-title>
+                  <!--ion-card-subtitle>Card Subtitle</ion-card-subtitle-->
+              </ion-card-header>
+                <!--ion-card-content> Card Content </ion-card-content-->
+            </ion-card>
+          </ion-col>
+
+      <!-- Boton Información del usuario -->
+          <ion-col>
+            <ion-card color="secondary">
+              <img alt="Información del usuario" src="https://cdn-icons-png.flaticon.com/128/2804/2804595.png" margin-top="10px" (click)="VerInfoUsuarioModal()" />
+              <ion-card-header>
+                <ion-card-title>Información del usuario</ion-card-title>
+                <!--ion-card-subtitle>Card Subtitle</ion-card-subtitle-->
+              </ion-card-header>
+                <!--ion-card-content> Card Content </ion-card-content-->
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-content>
+      </ng-template>
+    </ion-modal>
+
+    <!-- Pantalla de agenda de citas -->
+  <ion-modal [isOpen]="CitasModal">
+    <ng-template>
+      <ion-header>
+        <div style="padding: 5px;">
+          <ion-row>
+    <!-- Boton para regresar al menu -->
+            <ion-button mode="ios" color="medium" (click)="cerrarCitas()">
+              <ion-icon name="chevron-back-outline"></ion-icon>
+            </ion-button>  
+    <!-- Icono y texto  -->
+          <ion-avatar>
+            <img alt="Usuario" src="https://cdn-icons-png.flaticon.com/128/9411/9411437.png" />
+          </ion-avatar>
+          <h1 style="padding: 5px;color:white;">Citas agendadas</h1>
+        </ion-row>
+        </div>
+      </ion-header>
+    <!-- Boton para agregar citas -->
+      <ion-content mode="ios">
+        <ion-fab slot="fixed" vertical="top" horizontal="end" [edge]="true">
+            <ion-fab-button (click)="AgregarCitasModal()">
+            <ion-icon name="add"></ion-icon>
+          </ion-fab-button>
+        </ion-fab>
+        <ion-list>
+          <ion-item *ngFor="let cita of citas">
+            <ion-label>
+              <h2 style="margin-bottom: 8px;">{{ cita.especialidadMedico }}</h2>
+              <p>Notas: <br>{{ cita.notasMedicas }}</p>
+              <p>Fecha y hora: <br>{{ cita.fechaCita }}</p>
+              <!-- <p>Hora: {{ cita.horaCita }}</p> -->
+            </ion-label>
+            <ion-buttons slot="end">
+              <ion-button color="danger"  (click)="eliminarCita(cita.id)">  -Eliminar-  </ion-button>
+            </ion-buttons>
+          </ion-item>
+        </ion-list>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+<!-- Pantalla para agendar citas médicas -->
+<ion-modal [isOpen]="agregarCitasModal">
+  <ng-template>
+    <ion-header>
+      <div style="padding: 5px;">
+        <ion-row>
+          <ion-title style="color: white;">
+            <h1 style="padding: 5px;color:white;">Agendar cita médica</h1>
+          </ion-title>
+        </ion-row>
+      </div>
+    </ion-header>
+
+    <!-- Formulario para agendar una cita médica -->
+    <ion-content>
+      <ion-list>
+        <ion-item>
+          <ion-label>Fecha de la cita</ion-label>
+          <ion-datetime
+            [(ngModel)]="cita.fechaCita"
+            displayFormat="YYYY-MM-DD"
+            pickerFormat="YYYY-MM-DD"
+          ></ion-datetime>
+        </ion-item>
+        <ion-item>
+          <ion-textarea
+            label="Notas para el médico"
+            [(ngModel)]="cita.notasMedicas"
+            labelPlacement="stacked"
+            placeholder="Notas para el médico"
+            value=""
+          ></ion-textarea>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Especialidad del médico</ion-label>
+          <ion-select [(ngModel)]="cita.especialidadMedico">
+            <ion-select-option value="Cardiología">Cardiología</ion-select-option>
+            <ion-select-option value="Dermatología">Dermatología</ion-select-option>
+            <ion-select-option value="Pediatría">Pediatría</ion-select-option>
+            <!-- Agrega más opciones según las especialidades disponibles -->
+          </ion-select>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+
+    <!-- Pie de página -->
+    <ion-footer class="ion-no-border">
+      <ion-toolbar color="medium" mode="ios" style="text-align: center;">
+        <!-- Botón guardar cita médica -->
+        <ion-button color="success" (click)="guardarCita()">Guardar</ion-button>
+        <!-- Botón cancelar agregar -->
+        <ion-button color="dark" (click)="CancelarAgregarCitasModal()">Cancelar</ion-button>
+      </ion-toolbar>
+    </ion-footer>
+  </ng-template>
+</ion-modal>
+
+
+<!-- Pantalla de recordatorio de toma de medicamentos -->
+<ion-modal [isOpen]="MedicamentosModal">
+  <ng-template>
+    <ion-header>
+      <div style="padding: 5px;">
+        <ion-row>
+          <!-- Boton para regresar al menu -->
+          <ion-button mode="ios" color="medium" (click)="cerrarMedicamentos()">
+            <ion-icon name="chevron-back-outline"></ion-icon>
+          </ion-button>
+          <!-- Icono y texto -->
+          <ion-avatar>
+            <img alt="Medicamento" src="URL_DE_LA_IMAGEN_DEL_MEDICAMENTO" />
+          </ion-avatar>
+          <h1 style="padding: 5px; color: white;">Recordatorio de Medicamentos</h1>
+        </ion-row>
+      </div>
+    </ion-header>
+    <!-- Boton para agregar recordatorio -->
+    <ion-content mode="ios">
+      <ion-fab slot="fixed" vertical="top" horizontal="end" [edge]="true">
+        <ion-fab-button (click)="AgregarMedicamentoModal()">
+          <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+      <ion-list>
+        <ion-item *ngFor="let medicamento of medicamentos">
+          <ion-label>
+            <h2 style="margin-bottom: 8px;">{{ medicamento.nombre }}</h2>
+            <p>Cantidad: <br>{{ medicamento.cantidad }}</p>
+            <p>Forma de consumo: <br>{{ medicamento.formaConsumo }}</p>
+            <p>Frecuencia: <br>{{ medicamento.frecuencia }}</p>
+            <p>Duración: <br>{{ medicamento.duracion }}</p>
+          </ion-label>
+          <ion-buttons slot="end">
+            <ion-button color="danger" (click)="eliminarMedicamento(medicamento.id)"> -Eliminar- </ion-button>
+          </ion-buttons>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+<!-- Modal para agregar medicamentos -->
+<ion-modal [isOpen]="agregarMedicamentoModal">
+  <ng-template>
+    <ion-header>
+      <div style="padding: 5px;">
+        <ion-row>
+          <ion-title style="color: white;">
+            <h1 style="padding: 5px;color:white;">Agregar Medicamento</h1>
+          </ion-title>
+        </ion-row>
+      </div>
+    </ion-header>
+
+    <!-- Formulario para agregar un medicamento -->
+    <ion-content>
+      <ion-list>
+        <h3>Datos de la receta medica</h3>
+        <ion-item>
+          <ion-input [(ngModel)]="medicamento.nombre" placeholder="Nombre del medicamento"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input [(ngModel)]="medicamento.cantidad" type="number" placeholder="Cantidad"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input [(ngModel)]="medicamento.formaConsumo" placeholder="Forma de consumo"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input [(ngModel)]="medicamento.frecuencia" placeholder="Frecuencia de consumo"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input [(ngModel)]="medicamento.duracion" placeholder="Duración del tratamiento"></ion-input>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+
+    <!-- Pie de página -->
+    <ion-footer class="ion-no-border">
+      <ion-toolbar color="medium" mode="ios" style="text-align: center;">
+        <!-- Botón guardar medicamento -->
+        <ion-button color="success" (click)="guardarMedicamento()">Guardar</ion-button>
+        <!-- Botón cancelar agregar -->
+        <ion-button color="dark" (click)="CancelarAgregarMedicamentoModal()">Cancelar</ion-button>
+      </ion-toolbar>
+    </ion-footer>
+  </ng-template>
+</ion-modal>
+
+<!-- Modal para revisar la información del usuario -->
+<ion-modal [isOpen]="verInfoUsuarioModal">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar color="primary">
+        <ion-title>Información del Usuario</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="CerrarInfoUsuariosModal()">
+            Salir
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content>
+      <!-- Aquí puedes mostrar la información del usuario -->
+      <ion-list>
+        <ion-item>
+          <ion-label>Usuario</ion-label>
+          <ion-text>{{ elemento.usuario }}</ion-text>
+        </ion-item>
+        <ion-item>
+          <ion-label>Nombre</ion-label>
+          <ion-text>{{ elemento.nombre }}</ion-text>
+        </ion-item>
+        <ion-item>
+          <ion-label>Contraseña</ion-label>
+          <ion-text>{{ elemento.contrasena }}</ion-text>
+        </ion-item>
+        <ion-item>
+          <ion-label>Número de Seguro</ion-label>
+          <ion-text>{{ elemento.Nseguro }}</ion-text>
+        </ion-item>
+        <ion-item>
+          <ion-label>Fotografía</ion-label>
+          <img [src]="elemento.fotografia" style="width: 100px; margin: 10px;" />
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ng-template>
+</ion-modal>
